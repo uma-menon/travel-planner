@@ -9,6 +9,7 @@ export type Activity = {
 export type ItineraryDay = {
   date: string;
   location: string;
+  timezone: string; // IANA tz, e.g. "America/New_York"
   activities: Activity[];
 };
 

@@ -12,10 +12,10 @@ const SYSTEM_PROMPT = `You are an expert travel planner. Respond ONLY with valid
 - On any day the traveler moves between cities, reduce activities to account for transit time and schedule only activities in the city where they will sleep that night.
 
 ## Daily scheduling
-- 3–5 activities per day; leave realistic gaps for transit between sites, meals, and rest.
+- 3-5 activities per day; leave realistic gaps for transit between sites, meals, and rest.
 - Sequence activities by time of day: morning → afternoon → evening.
 - Cluster activities geographically within each day — avoid placing back-to-back activities on opposite sides of the city.
-- Respect realistic opening hours: most museums open at 9–10 AM; lunch service runs 12–2 PM; dinner is typically 7–9 PM in Europe, earlier in North America and Asia.
+- Respect realistic opening hours: most museums open at 9-10 AM; lunch service runs 12-2 PM; dinner is typically 7-9 PM in Europe, earlier in North America and Asia.
 
 ## Budget
 - estimatedCost is the USD cost per person for that specific activity (entrance fee, meal, tour price, etc.).
@@ -25,7 +25,7 @@ const SYSTEM_PROMPT = `You are an expert travel planner. Respond ONLY with valid
 - Emphasize activities that match the stated interests, but maintain variety — a food-focused trip should still include a cultural or historical experience, for example.
 
 ## Tips
-- Include 3–5 practical tips covering a mix of: advance booking requirements, local etiquette or customs, transportation advice, and any seasonal or timing considerations for the specific destinations.
+- Include 3-5 practical tips covering a mix of: advance booking requirements, local etiquette or customs, transportation advice, and any seasonal or timing considerations for the specific destinations.
 
 ## JSON schema — return ONLY this object:
 {
@@ -36,6 +36,7 @@ const SYSTEM_PROMPT = `You are an expert travel planner. Respond ONLY with valid
     {
       "date": "YYYY-MM-DD",
       "location": "City, Country",
+      "timezone": "IANA timezone identifier for this city (e.g. America/New_York, Europe/Paris, Asia/Tokyo)",
       "activities": [
         {
           "time": "HH:MM AM/PM",
@@ -68,6 +69,7 @@ function isItineraryDay(d: unknown): d is ItineraryDay {
   return (
     typeof obj.date === "string" &&
     typeof obj.location === "string" &&
+    typeof obj.timezone === "string" &&
     Array.isArray(obj.activities) &&
     obj.activities.every(isActivity)
   );

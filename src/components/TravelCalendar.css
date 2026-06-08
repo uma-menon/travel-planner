@@ -1,0 +1,105 @@
+/* Dark-theme overrides for @calendarjs/ce Schedule, scoped to .travel-calendar-wrapper */
+
+.travel-calendar-wrapper .lm-schedule { /*base colors of calendar*/
+  --lm-background-color: oklch(0.15 0 0);
+  --lm-background-color-header: oklch(0.20 0.02 207);
+  --lm-border-color: oklch(1 0 0 / 9%);
+  --lm-border-color-light: oklch(1 0 0 / 5%);
+  --lm-border-color-highlight: oklch(1 0 0 / 18%);
+  --lm-border-outline: oklch(0.68 0.16 207);
+  background-color: oklch(0.15 0 0);
+  color: oklch(0.90 0 0);
+  scrollbar-color: oklch(1 0 0 / 18%) transparent;
+}
+
+.travel-calendar-wrapper .lm-schedule table {/* table background and text color */
+  background-color: oklch(0.15 0 0);
+  color: oklch(0.90 0 0);
+}
+
+.travel-calendar-wrapper .lm-schedule thead td { /* Header background and text color */
+  background-color: oklch(0.15 0 0) !important;
+  color: oklch(0.90 0 0) !important;
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+  font-size: 1.5em !important;
+}
+
+.travel-calendar-wrapper .lm-schedule thead td:before {/* Weekday label (SUN / MON …) */
+  color: oklch(0.50 0 0);
+  padding-bottom: 2px;
+}
+
+/* Today column */
+.travel-calendar-wrapper .lm-schedule thead td[data-selected='true'] {
+  background-color: oklch(0.19 0.025 207) !important;
+  color: oklch(0.80 0.14 207) !important;
+}
+
+/* Header bottom borders */
+.travel-calendar-wrapper .lm-schedule thead td:after {
+  border-bottom-color: oklch(1 0 0 / 8%) !important;
+}
+
+.travel-calendar-wrapper .lm-schedule thead td[data-selected='true']:after {
+  border-bottom-color: oklch(0.68 0.16 207) !important;
+}
+
+/* Hour separators = very faint */
+.travel-calendar-wrapper .lm-schedule .lm-schedule-hour > td {
+  border-top: 1px solid oklch(1 0 0 / 4%) !important;
+}
+
+/* Left time-column border */
+.travel-calendar-wrapper .lm-schedule table tbody td:first-child {
+  border-right: 1px solid oklch(1 0 0 / 8%) !important;
+}
+
+/* Hour label text */
+.travel-calendar-wrapper .lm-schedule .lm-schedule-index {
+  color: oklch(0.42 0 0);
+  font-size: 0.68em;
+}
+
+/* Body cells */
+.travel-calendar-wrapper .lm-schedule tbody td {
+  background-color: oklch(0.15 0 0);
+}
+
+/* Drag-select highlight */
+.travel-calendar-wrapper .lm-schedule .lm-schedule-selected {
+  background-color: oklch(0.68 0.16 207 / 12%) !important;
+}
+
+/* ── Delete (×) button on each event ─────────────────────────────────────── */
+
+.travel-calendar-wrapper .lm-schedule-item {
+  overflow: visible !important;
+}
+
+.travel-del {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: oklch(0.20 0 0 / 85%);
+  color: oklch(0.75 0 0);
+  border: 1px solid oklch(1 0 0 / 20%);
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  z-index: 100;
+  transition: background 0.1s, color 0.1s;
+}
+
+.travel-del:hover {
+  background: oklch(0.55 0.18 25 / 90%);
+  color: white;
+  border-color: transparent;
+}

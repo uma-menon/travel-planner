@@ -14,11 +14,12 @@ type Props = {
 };
 
 const OPTIONS = [
-  { label: "History & Culture", value: "history" },
-  { label: "Food & Drink", value: "food" },
-  { label: "Lifestyle & Entertainment", value: "lifestyle" },
-  { label: "Nature & Outdoors", value: "nature" },
+  { label: "History & Culture", value: "history"},
+  { label: "Food & Drink", value: "food"},
+  { label: "Lifestyle & Entertainment", value: "lifestyle"},
+  { label: "Nature & Outdoors", value: "nature"},
 ];
+
 export function CheckboxGroup({ interests, setInterests }: Props) {
   const toggleInterest = (value: string, checked: boolean) => {
     setInterests((prev) =>

@@ -1,10 +1,9 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
 ## Install dependencies: 
 
 ```bash
 npm install @google/genai
 npm install date-fns react-day-picker @radix-ui/react-slot
+npm install @calendarjs/ce
 ```
 
 ## Getting Started
