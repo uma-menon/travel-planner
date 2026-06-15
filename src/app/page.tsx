@@ -234,9 +234,14 @@ export default function Home() {
           <div className="flex flex-col h-full">
             {/* Top bar: meta + view toggle */}
             <div className="px-6 pt-4 pb-0 flex items-center justify-between shrink-0">
-              <p className="text-sm font-medium text-muted-foreground">
-                {result.totalDays} days · ${result.dailyBudget}/day per person
-              </p>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  {result.totalDays} days · ${result.dailyBudget}/day per person
+                </p>
+                <p className="text-[12px] font-medium text-muted-foreground/50 mt-0.5">
+                  Next Stop uses Retrieval-Augmented Generation (RAG). Real data from WikiVoyage is retrieved and grounded into every itinerary, reducing hallucinations and ensuring your itinerary reflects what actually exists.
+                </p>
+              </div>
               <div className="flex items-center gap-0.5 rounded-md border border-border p-0.5">
                 {(['calendar', 'list'] as const).map((v) => (
                   <button

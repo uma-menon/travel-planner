@@ -1,6 +1,8 @@
 import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
 import type { ChatRequest, TravelItinerary, Activity, ItineraryDay } from "@/lib/types";
+import { fetchWikiVoyageSections } from "@/lib/wikivoyage";
+import { retrieveTopChunks, formatRagContext } from "@/lib/rag";
 
 const ai = new GoogleGenAI({});
 
@@ -127,11 +129,21 @@ export async function POST(request: Request) {
       .filter(Boolean)
       .join("\n");
 
+    const allChunks = (await Promise.all(destinations.map(fetchWikiVoyageSections))).flat();
+    console.log(`[RAG] fetched ${allChunks.length} chunks:`, allChunks.map(c => `${c.destination}/${c.section}`));
+
+    const ragQuery = `${destinations.join(", ")} travel: ${interests.length ? interests.join(", ") : "sightseeing"}, $${budget}/day`; //Sightseeing fallback (no interests selected)
+    const topChunks = await retrieveTopChunks(allChunks, ragQuery);
+    console.log(`[RAG] top ${topChunks.length} chunks:`, topChunks.map(c => `${c.destination}/${c.section}`));
+
+    const ragContext = formatRagContext(topChunks);
+    console.log(`[RAG] context length: ${ragContext.length} chars`);
+
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: userPrompt,
       config: {
-        systemInstruction: SYSTEM_PROMPT,
+        systemInstruction: SYSTEM_PROMPT + ragContext,
         responseMimeType: "application/json",
       },
     });
