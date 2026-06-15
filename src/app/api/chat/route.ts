@@ -4,7 +4,7 @@ import type { ChatRequest, TravelItinerary, Activity, ItineraryDay } from "@/lib
 import { fetchWikiVoyageSections } from "@/lib/wikivoyage";
 import { retrieveTopChunks, formatRagContext } from "@/lib/rag";
 
-const ai = new GoogleGenAI({});
+const ai = new GoogleGenAI({apiKey: process.env.GEMINI_API_KEY});
 
 const SYSTEM_PROMPT = `You are an expert travel planner. Respond ONLY with valid JSON — no markdown, no code fences, no prose outside the JSON object.
 
@@ -167,7 +167,20 @@ export async function POST(request: Request) {
       );
     }
 
-    return NextResponse.json({ result: parsed });
+    // Merge any duplicate dates from model response
+    const mergedDays = Object.values(
+      parsed.days.reduce<Record<string, (typeof parsed.days)[0]>>((acc, day) => {
+        if (acc[day.date]) {
+          acc[day.date] = { ...acc[day.date], activities: [...acc[day.date].activities, ...day.activities] };
+        } else {
+          acc[day.date] = day;
+        }
+        return acc;
+      }, {})
+    );
+    const result = { ...parsed, days: mergedDays };
+
+    return NextResponse.json({ result });
     } catch (error: any) {
         console.error("Gemini API Error:", error);
 

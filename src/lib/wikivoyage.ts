@@ -30,6 +30,7 @@ export async function fetchWikiVoyageSections(destination: string): Promise<Wiki
   try {
     const res = await fetch(url, {
       headers: { 'User-Agent': 'TravelPlanner/1.0 (https://github.com/uma-menon/travel-planner, uma1menon@gmail.com)' },
+      next: { revalidate: 86400 }
     });
     if (!res.ok) return [];
 

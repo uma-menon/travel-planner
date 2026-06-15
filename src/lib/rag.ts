@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import type { WikiChunk } from "./wikivoyage";
 
-const ai = new GoogleGenAI({});
+const ai = new GoogleGenAI({apiKey: process.env.GEMINI_API_KEY});
 
 function cosine(a: number[], b: number[]): number {
   let dot = 0, na = 0, nb = 0;
