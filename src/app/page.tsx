@@ -101,13 +101,16 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen bg-background text-foreground">
       {/* Full-width header strip */}
-      <header className="shrink-0 border-b border-border/40 flex items-center justify-center py-3.5">
+      <header className="shrink-0 border-b border-border/40 flex flex-col items-center justify-center py-3">
         <h1
           className="text-2xl font-light tracking-[0.15em] text-primary uppercase"
           style={{ fontFamily: 'var(--font-display)' }}
         >
-          Travel Planner{/* tracking-[0.25em] */}
+          Next Stop
         </h1>
+        <p className="text-[10px] tracking-widest text-muted-foreground/60 uppercase mt-0.5">
+          Personalized, AI-powered travel planning and itinerary generation
+        </p>
       </header>
 
       {/* Main two-column layout */}
@@ -117,7 +120,7 @@ export default function Home() {
       <aside className="w-[500px] shrink-0 border-r border-border flex flex-col h-full overflow-y-auto">
         <div className="px-8 pt-5 pb-4 border-b border-border/50 shrink-0">
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Enter your destination, dates, interests, and budget to generate a day-by-day itinerary.
+            Enter your destination, dates, interests, and budget to get started.
           </p>
         </div>
         <div className="flex-1 flex flex-col px-8 py-6">

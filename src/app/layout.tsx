@@ -22,8 +22,8 @@ const sansita = Sansita({//header
 });
 
 export const metadata: Metadata = {
-  title: "Trip Planner",
-  description: "Plan your perfect trip with AI",
+  title: "Next Stop",
+  description: "Personalized AI-powered travel planning and itinerary generation.",
 };
 
 export default function RootLayout({
