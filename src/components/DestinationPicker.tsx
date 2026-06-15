@@ -51,14 +51,18 @@ function ensureCaches() {
 
 function searchCities(query: string): Destination[] {
   ensureCaches()
-  const q = query.toLowerCase()
+  const [cityPart, ...rest] = query.split(",")
+  const cityQ = cityPart.toLowerCase().trim()
+  const regionQ = rest.join(",").toLowerCase().trim()
+
   const results: Destination[] = []
   for (const city of cachedCities!) {
     if (results.length >= MAX_RESULTS) break
-    if (!city.name.toLowerCase().startsWith(q)) continue
+    if (!city.name.toLowerCase().startsWith(cityQ)) continue
     const country = countryNames!.get(city.countryCode) ?? city.countryCode
     const state = stateNames!.get(`${city.stateCode}-${city.countryCode}`)
     const label = [city.name, state, country].filter(Boolean).join(", ")
+    if (regionQ && !label.toLowerCase().includes(regionQ)) continue
     results.push({ id: `${city.name}-${city.stateCode}-${city.countryCode}`, label })
   }
   return results
