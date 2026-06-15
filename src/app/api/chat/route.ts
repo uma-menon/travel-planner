@@ -139,15 +139,32 @@ export async function POST(request: Request) {
     const ragContext = formatRagContext(topChunks);
     console.log(`[RAG] context length: ${ragContext.length} chars`);
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: userPrompt,
-      config: {
-        systemInstruction: SYSTEM_PROMPT + ragContext,
-        responseMimeType: "application/json",
-      },
-    });
+    const MODELS = ["gemini-flash-latest", "gemini-2.5-flash","gemini-flash-lite-latest"];
 
+    let response;
+    for (const model of MODELS) {
+      try {
+        response = await ai.models.generateContent({ 
+        model: model,
+        contents: userPrompt,
+        config: {
+          systemInstruction: SYSTEM_PROMPT + ragContext,
+          responseMimeType: "application/json",
+        },
+        });
+        console.log("[MODEL USE] ", model);
+        break;
+
+      } catch (err: any) {
+        const is503 = err?.status === 503 || err?.message?.includes('503') || err?.message?.includes('overloaded');
+        if (is503 && model !== MODELS.at(-1)) continue;
+        throw err;
+      }
+    }
+
+    if(!response) {
+      return NextResponse.json({ error: "No response from model" }, { status: 500 });
+    }
     const text = response.text;
     if (!text) {
       return NextResponse.json({ error: "No response from model" }, { status: 500 });
