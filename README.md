@@ -4,8 +4,7 @@
 
 **Check it out here → [https://travel-planner-umamenon.vercel.app](https://travel-planner-umamenon.vercel.app)**
 
-<img width="483" height="275.7125" alt="Screenshot 2026-06-18 at 9 08 29 PM" src="https://github.com/user-attachments/assets/a1d0baf0-2c2e-4624-837e-8c3571092ab8" />
-<img width="483" height="275.7125" alt="Screenshot 2026-06-18 at 9 08 42 PM" src="https://github.com/user-attachments/assets/4bc9633b-4d70-4de0-8c95-689555e427b9" />
+
 
 ## Why I Built This
 
@@ -18,20 +17,30 @@ Next Stop first asks *you* questions, then fetches live WikiVoyage articles at g
 ## Features
 
 - **4-step guided wizard** — destination picker → interests → daily budget → optional notes, with inline validation at each step
-- **RAG-grounded itineraries** — every itinerary is anchored to live WikiVoyage articles, not just model priors (see [Architecture](#architecture) below)
+- **RAG-grounded itineraries** — every itinerary is anchored to live WikiVoyage articles, not just model priors (see `Architecture` below)
 - **Multi-destination sequencing** — days distributed proportionally, cities ordered to minimize geographic backtracking
 - **Dual itinerary views** — calendar view with color-coded time-of-day events, or a compact list view
 - **ICS export** — import your full itinerary, timezone-adjusted, into any calendar app
 - **Budget-aware scheduling** — per-activity cost estimates that sum to the stated daily budget
+- **Google login** — sign in with Google OAuth to save itineraries, or continue as a guest
+- **Saved itineraries** — save generated trips to your profile dashboard, view them anytime, and delete when done
+- **Shareable links** — each saved itinerary has a unique URL anyone can open to view the full trip
 
 ## Architecture
 
 ```mermaid
 flowchart TD
     subgraph Browser["Browser — Next.js App Router"]
+        Login[Login / Guest]
         W[4-step Wizard]
         C[Calendar View]
         L[List View]
+        Profile[Profile Dashboard]
+    end
+
+    subgraph Auth["Authentication & Storage"]
+        NA[NextAuth — Google OAuth]
+        SB[(Supabase — itineraries table)]
     end
 
     subgraph API["Next.js API Route  /api/chat"]
@@ -50,7 +59,11 @@ flowchart TD
         GG[Gemini Generation API]
     end
 
+    Login --> W
     W -- "destinations · dates\ninterests · budget" --> API
+    Login <--> NA
+    C -- "Save Itinerary" --> SB
+    Profile <--> SB
     F <--> WV
     F --> P --> E
     E <--> GE
@@ -70,6 +83,7 @@ flowchart TD
 5. Selected 8 chunks appended to the system prompt as grounded context before generation.
 6. `gemini-flash-latest` (currently 3.5-Flash) generates a validated JSON itinerary. If it returns a 503 due to model overload, the server retries with `gemini-flash-lite-latest` (currently 3.1-Flash-Lite).
 7. The response is validated against the TypeScript `TravelItinerary` schema before being returned to the client.
+
 
 ### JSON schema
 
@@ -96,6 +110,7 @@ The model is constrained to return only this object:
 }
 ```
 
+
 ## Tech Stack
 
 | Layer | Technology |
@@ -105,8 +120,11 @@ The model is constrained to return only this object:
 | Styling | Tailwind CSS v4, shadcn/ui |
 | Calendar | @calendarjs/ce |
 | AI / Embeddings | Google Gemini API (`@google/genai`) |
+| Auth | NextAuth (Google OAuth) |
+| Database | Supabase (PostgreSQL) |
 | Deployment | Vercel |
 | Data source | WikiVoyage MediaWiki API |
+
 
 
 ## Local Setup
@@ -120,7 +138,20 @@ npm install
 Create `.env`:
 
 ```env
-GEMINI_API_KEY=your_key_here
+# LLM and embeddings
+GEMINI_API_KEY=
+
+# Google OAuth Credentials
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+# NextAuth credentials
+NEXTAUTH_SECRET=
+NEXTAUTH_URL=http://localhost:3000
+
+# Database credentials
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
 ```
 
 ```bash
@@ -128,7 +159,6 @@ npm run dev # → http://localhost:3000
 ```
 
 ## Currently working on...
-
-- **Accounts & saved itineraries** — authenticate users and persist generated trips so they can revisit, share, or export them
+- **Saved itineraries** – add shared itineraries to your itinerary dashboard, and make changes to your saved itineraries
 - **RAG evals** — build an evaluation harness to measure retrieval quality (precision/recall of relevant chunks) and generation quality (factual accuracy, hallucination rate)
 - **Map view** — integrate a maps API to render alongside the calendar and list views
