@@ -131,36 +131,26 @@ function buildICS(events: any[], descMap: Map<string, string>): string {// Uses 
 
 // ── × delete-button DOM helpers ───────────────────────────────────────────────
 
-function attachDeleteBtn(itemEl: HTMLElement, scheduleInstance: any, textColorMap?: Map<string, string>) {
-  if (itemEl.dataset.hasDelBtn) return;
-  itemEl.dataset.hasDelBtn = '1';
+function applyTextColor(itemEl: HTMLElement, textColorMap?: Map<string, string>) {
+  if (itemEl.dataset.colored) return;
+  itemEl.dataset.colored = '1';
   const guid = itemEl.id;
   if (!guid) return;
   const tc = textColorMap?.get(guid);
   if (tc) itemEl.style.color = tc;
-  const btn = document.createElement('button');
-  btn.className = 'travel-del';
-  btn.setAttribute('aria-label', 'Delete event');
-  btn.textContent = '×';
-  btn.addEventListener('mousedown', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    scheduleInstance.deleteEvents(guid);
-  });
-  itemEl.appendChild(btn);
 }
 
-function setupDeleteButtons(instance: any, container: HTMLElement, textColorMap?: Map<string, string>): MutationObserver {
+function setupTextColors(container: HTMLElement, textColorMap?: Map<string, string>): MutationObserver {
   container.querySelectorAll<HTMLElement>('.lm-schedule-item').forEach(
-    (el) => attachDeleteBtn(el, instance, textColorMap)
+    (el) => applyTextColor(el, textColorMap)
   );
   const obs = new MutationObserver((mutations) => {
     for (const m of mutations) {
       for (const node of Array.from(m.addedNodes)) {
         if (!(node instanceof HTMLElement)) continue;
-        if (node.classList.contains('lm-schedule-item')) attachDeleteBtn(node, instance, textColorMap);
+        if (node.classList.contains('lm-schedule-item')) applyTextColor(node, textColorMap);
         node.querySelectorAll<HTMLElement>('.lm-schedule-item').forEach(
-          (el) => attachDeleteBtn(el, instance, textColorMap)
+          (el) => applyTextColor(el, textColorMap)
         );
       }
     }
@@ -250,12 +240,12 @@ export function TravelCalendar({ result, dateRange }: TravelCalendarProps) {
         value: toScheduleValue(ws),
         data:  events,
         grid:  15,//15-min intervals
-        oncreate: (_self: any, newEvs: any[]) => {//Attach delete buttons & set text colors
+        oncreate: (_self: any, newEvs: any[]) => {
           setTimeout(() => {
             if (!containerRef.current) return;
             for (const ev of newEvs) {
               const el = containerRef.current.querySelector<HTMLElement>(`#${CSS.escape(ev.guid)}`);
-              if (el) attachDeleteBtn(el, scheduleRef.current, textColorMapRef.current);
+              if (el) applyTextColor(el, textColorMapRef.current);
             }
           }, 0);
         },
@@ -268,7 +258,7 @@ export function TravelCalendar({ result, dateRange }: TravelCalendarProps) {
       applyHeaderFix();
       setTimeout(applyHeaderFix, 50);
 
-      observerRef.current = setupDeleteButtons(scheduleRef.current, containerRef.current, textColorMapRef.current);
+      observerRef.current = setupTextColors(containerRef.current, textColorMapRef.current);
     });
 
     return () => {
@@ -347,7 +337,7 @@ export function TravelCalendar({ result, dateRange }: TravelCalendarProps) {
         </div>
         <button
           onClick={handleExport}
-          className="text-xs px-3 py-1.5 rounded border border-border hover:bg-muted transition-colors"
+          className="text-xs px-3 py-1.5 rounded font-medium bg-[oklch(0.72_0.18_50)] text-[oklch(0.15_0_0)] hover:bg-[oklch(0.66_0.18_50)] transition-colors"
         >
           Export .ics
         </button>
