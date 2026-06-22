@@ -103,8 +103,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Travel dates are required" }, { status: 400 });
     }
 
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    const start = new Date(startDate + "T00:00:00");
+    const end = new Date(endDate + "T00:00:00");
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 

@@ -73,8 +73,12 @@ export default function Home() {
       if (!dateRange?.from || !dateRange?.to) return "Please select a travel date range.";
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      if (dateRange.from < today) return "Start date must be today or in the future.";
-      if (dateRange.to < dateRange.from) return "End date must be after start date.";
+      const from = new Date(dateRange.from);
+      from.setHours(0, 0, 0, 0);
+      if (from < today) return "Start date must be today or in the future.";
+      const to = new Date(dateRange.to);
+      to.setHours(0, 0, 0, 0);
+      if (to < from) return "End date must be after start date.";
     }
     return null;
   }
@@ -92,13 +96,6 @@ export default function Home() {
   }
 
   async function handleSubmit() {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    if (destinations.length === 0) { setError("Please select at least one destination."); return; }
-    if (!dateRange?.from || !dateRange?.to) { setError("Please select a travel date range."); return; }
-    if (dateRange.from < today) { setError("Start date must be today or in the future."); return; }
-    if (dateRange.to < dateRange.from) { setError("End date must be after start date."); return; }
-
     setError(null);
     setLoading(true);
     setResult(null);
