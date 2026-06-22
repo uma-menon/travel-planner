@@ -4,10 +4,10 @@
 
 **Check it out here → [https://travel-planner-umamenon.vercel.app](https://travel-planner-umamenon.vercel.app)**
 
-<img width="496" height="310" alt="Screenshot 2026-06-21 at 3 47 35 PM" src="https://github.com/user-attachments/assets/6dfc86f0-85e6-4d11-96ec-e5edc94d7b63" />
-<img width="496" height="310" alt="Screenshot 2026-06-21 at 4 00 22 PM" src="https://github.com/user-attachments/assets/f84d52bf-60d3-496d-8197-bd0edd35e3d4" />
-<img width="496" height="310" alt="Screenshot 2026-06-21 at 3 56 19 PM" src="https://github.com/user-attachments/assets/65106ea5-f1db-42d8-9253-c08f76d1067b" />
-<img width="496" height="310" alt="Screenshot 2026-06-21 at 4 00 03 PM" src="https://github.com/user-attachments/assets/300ddbfd-ef02-418a-849d-a7427882ae0d" />
+<img width="496" height="310" alt="Screenshot 2026-06-21 at 3 47 35 PM" src="./public/assets/login.png" />
+<img width="496" height="310" alt="Screenshot 2026-06-21 at 4 00 22 PM" src="./public/assets/wizard_step1.png" />
+<img width="496" height="310" alt="Screenshot 2026-06-21 at 3 56 19 PM" src="./public/assets/new_itinerary.png" />
+<img width="496" height="310" alt="Screenshot 2026-06-21 at 4 00 03 PM" src="./public/assets/profile.png" />
 
 ## Why I Built This
 
