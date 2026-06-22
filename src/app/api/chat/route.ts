@@ -105,15 +105,6 @@ export async function POST(request: Request) {
 
     const start = new Date(startDate + "T00:00:00");
     const end = new Date(endDate + "T00:00:00");
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (start < today) {
-      return NextResponse.json({ error: "Start date must be today or in the future" }, { status: 400 });
-    }
-    if (end < start) {
-      return NextResponse.json({ error: "End date must be after start date" }, { status: 400 });
-    }
 
     const totalDays =
       Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
